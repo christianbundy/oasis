@@ -29,4 +29,4 @@ stow christianbundy:dotfiles
 
 ## Support
 
-I'm not currently maintaining this project for public usage, but if you find an issue I'd love to hear aboutit.
+I'm not currently maintaining this project for public usage, but if you find an issue I'd love to hear about it.
