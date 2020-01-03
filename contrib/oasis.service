@@ -5,8 +5,10 @@ After=network.target
 
 [Service]
 Type=simple
-User=unicorn
-ExecStart=/usr/bin/node /home/unicorn/.yarn/bin/oasis --host localhost --port 4515
+# %s : run in the user's shell because they might have a custom PATH
+# -l : invoke a login shell to make sure to source .profile, .zprofile, .bash_profile, ...
+# -c : invoke a shell because we'd have to hardcode a path using ExecStart
+ExecStart=%s -l -c 'oasis --host localhost --port 4515 --no-open'
 Restart=on-failure
 
 [Install]
