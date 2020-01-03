@@ -255,6 +255,7 @@ module.exports = config => {
     })
     .get('/image/:imageSize/:blobId', async ctx => {
       const { blobId, imageSize: stringImageSize } = ctx.params
+      ctx.body = 'wat'
       const imageSize = Number(stringImageSize)
       ctx.type = 'image/png'
 
@@ -284,39 +285,40 @@ module.exports = config => {
 
       const bufferSource = await blobModel.get({ blobId })
 
-      // TODO: Refactor below so we only have one `ctx.body =`
-      if (blobId === fakeId) {
-        debug('fake image')
-        const result = await fakeImage(imageSize)
-        ctx.body = result
-      } else {
-        debug('not fake image')
-        pull(
-          bufferSource,
-          pull.collect(async (err, bufferArray) => {
-            if (err) {
-              await blobModel.want({ blobId })
-              const result = fakeImage(imageSize)
-              debug({ result })
-              ctx.body = result
-            } else {
-              const buffer = Buffer.concat(bufferArray)
-
-              if (sharp) {
-                sharp(buffer)
-                  .resize(imageSize, imageSize)
-                  .png()
-                  .toBuffer()
-                  .then(data => {
-                    ctx.body = data
-                  })
+      ctx.body = await new Promise((resolve) => {
+        if (blobId === fakeId) {
+          debug('fake image')
+          fakeImage(imageSize).then(result => resolve(result))
+        } else {
+          debug('not fake image')
+          pull(
+            bufferSource,
+            pull.collect(async (err, bufferArray) => {
+              if (err) {
+                blobModel.want({ blobId })
+                fakeImage(imageSize).then((result) => {
+                  debug({ result })
+                  ctx.body = result
+                })
               } else {
-                ctx.body = buffer
+                const buffer = Buffer.concat(bufferArray)
+
+                if (sharp) {
+                  sharp(buffer)
+                    .resize(imageSize, imageSize)
+                    .png()
+                    .toBuffer()
+                    .then(data => {
+                      resolve(data)
+                    })
+                } else {
+                  resolve(buffer)
+                }
               }
-            }
-          })
-        )
-      }
+            })
+          )
+        }
+      })
     })
     .get('/meta/', async ctx => {
       const theme = ctx.cookies.get('theme') || defaultTheme
