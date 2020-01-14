@@ -112,7 +112,7 @@ main().then(async () => {
 
           console.log(repo.name)
           execSync(
-            `git clone ${branchString} ${depthFlag} ${url} ${repo.name}`,
+            `git clone --bare ${branchString} ${depthFlag} ${url} ${repo.name}`,
             {
               cwd
             }
