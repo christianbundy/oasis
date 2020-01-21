@@ -1,0 +1,3 @@
+[remote "upstream-fraction"]
+    url = git://github.com/fraction/oasis.git
+
