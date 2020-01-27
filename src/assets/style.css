@@ -483,3 +483,9 @@ hr {
     max-width: none;
   }
 }
+
+.form-button-group {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--whole) 0;
+}
