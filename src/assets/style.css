@@ -68,6 +68,7 @@ html {
   line-height: 1.5;
   margin: 0;
   padding: 0;
+  overflow-y: scroll;
 }
 
 main {
@@ -316,6 +317,8 @@ section {
   margin: var(--whole) 0;
   word-wrap: break-word;
   background: var(--bg);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 section > header {
@@ -456,4 +459,27 @@ input[type="search"] {
 
 hr {
   border: var(--pico) solid var(--fg-alt);
+}
+
+/* sidebar only appears on big screens */
+@media (min-width: calc(45rem)) {
+  body > nav > ul {
+    justify-content: right;
+    flex-direction: column;
+    margin-right: var(--kilo);
+    position: sticky;
+    top: var(--whole);
+  }
+  body > nav > ul > li {
+    margin-bottom: var(--whole);
+  }
+  main {
+    width: 100%;
+    max-width: var(--measure);
+  }
+  body {
+    display: flex;
+    justify-content: center;
+    max-width: none;
+  }
 }
