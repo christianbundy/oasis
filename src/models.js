@@ -29,14 +29,14 @@ module.exports = cooler => {
   models.about = {
     name: async feedId => {
       const ssb = await cooler.connect();
-      return cooler.get(ssb.about.socialValue, {
+      return ssb.about.socialValue({
         key: "name",
         dest: feedId
       });
     },
     image: async feedId => {
       const ssb = await cooler.connect();
-      const raw = await cooler.get(ssb.about.socialValue, {
+      const raw = await ssb.about.socialValue({
         key: "image",
         dest: feedId
       });
@@ -51,7 +51,7 @@ module.exports = cooler => {
     },
     description: async feedId => {
       const ssb = await cooler.connect();
-      const raw = await cooler.get(ssb.about.socialValue, {
+      const raw = await ssb.about.socialValue({
         key: "description",
         dest: feedId
       });
@@ -59,7 +59,7 @@ module.exports = cooler => {
     },
     all: async feedId => {
       const ssb = await cooler.connect();
-      const raw = await cooler.read(ssb.about.read, {
+      const raw = await ssb.about.read({
         dest: feedId
       });
 
@@ -97,14 +97,14 @@ module.exports = cooler => {
     get: async ({ blobId }) => {
       debug("get blob: %s", blobId);
       const ssb = await cooler.connect();
-      return cooler.read(ssb.blobs.get, blobId);
+      return ssb.blobs.get(blobId);
     },
     want: async ({ blobId }) => {
       debug("want blob: %s", blobId);
       const ssb = await cooler.connect();
 
       // This does not wait for the blob.
-      cooler.get(ssb.blobs.want, blobId);
+      ssb.blobs.want(blobId);
     }
   };
 
@@ -113,7 +113,7 @@ module.exports = cooler => {
       const ssb = await cooler.connect();
       const { id } = ssb;
 
-      const isFollowing = await cooler.get(ssb.friends.isFollowing, {
+      const isFollowing = await ssb.friends.isFollowing({
         source: id,
         dest: feedId
       });
@@ -128,7 +128,7 @@ module.exports = cooler => {
         following
       };
 
-      return cooler.get(ssb.publish, content);
+      return ssb.publish(content);
     },
     follow: async feedId => {
       const isFollowing = await models.friend.isFollowing(feedId);
@@ -150,12 +150,12 @@ module.exports = cooler => {
         return "this is you";
       }
 
-      const isFollowing = await cooler.get(ssb.friends.isFollowing, {
+      const isFollowing = await ssb.friends.isFollowing({
         source: id,
         dest: feedId
       });
 
-      const isBlocking = await cooler.get(ssb.friends.isBlocking, {
+      const isBlocking = await ssb.friends.isBlocking({
         source: id,
         dest: feedId
       });
@@ -181,7 +181,7 @@ module.exports = cooler => {
     },
     get: async msgId => {
       const ssb = await cooler.connect();
-      return cooler.get(ssb.get, {
+      return ssb.get({
         id: msgId,
         meta: true,
         private: true
@@ -189,11 +189,11 @@ module.exports = cooler => {
     },
     status: async () => {
       const ssb = await cooler.connect();
-      return cooler.get(ssb.status);
+      return ssb.status();
     },
     peers: async () => {
       const ssb = await cooler.connect();
-      const peersSource = await cooler.read(ssb.conn.peers);
+      const peersSource = await ssb.conn.peers();
 
       return new Promise((resolve, reject) => {
         pull(
@@ -211,7 +211,7 @@ module.exports = cooler => {
       const ssb = await cooler.connect();
 
       try {
-        const result = await cooler.get(ssb.conn.stop);
+        const result = await ssb.conn.stop();
         return result;
       } catch (e) {
         const expectedName = "TypeError";
@@ -226,7 +226,7 @@ module.exports = cooler => {
     },
     connStart: async () => {
       const ssb = await cooler.connect();
-      const result = await cooler.get(ssb.conn.start);
+      const result = await ssb.conn.start();
 
       return result;
     },
@@ -281,7 +281,7 @@ module.exports = cooler => {
   }) => {
     const options = configure({ query, index: "DTA" }, customOptions);
 
-    const source = await cooler.read(ssb.backlinks.read, options);
+    const source = await ssb.backlinks.read(options);
 
     return new Promise((resolve, reject) => {
       pull(
@@ -319,7 +319,7 @@ module.exports = cooler => {
           }
         };
 
-        const referenceStream = await cooler.read(ssb.backlinks.read, {
+        const referenceStream = await ssb.backlinks.read({
           query: [filterQuery],
           index: "DTA", // use asserted timestamps
           private: true,
@@ -362,12 +362,12 @@ module.exports = cooler => {
           .filter(([, value]) => value === 1)
           .map(([key]) => key);
 
-        const pendingName = cooler.get(ssb.about.socialValue, {
+        const pendingName = ssb.about.socialValue({
           key: "name",
           dest: msg.value.author
         });
 
-        const pendingAvatarMsg = cooler.get(ssb.about.socialValue, {
+        const pendingAvatarMsg = ssb.about.socialValue({
           key: "image",
           dest: msg.value.author
         });
@@ -435,7 +435,7 @@ module.exports = cooler => {
       const myFeedId = ssb.id;
 
       const options = configure({ id: feedId }, customOptions);
-      const source = await cooler.read(ssb.createUserStream, options);
+      const source = await ssb.createUserStream(options);
 
       const messages = await new Promise((resolve, reject) => {
         pull(
@@ -552,7 +552,7 @@ module.exports = cooler => {
         customOptions
       );
 
-      const source = await cooler.read(ssb.query.read, options);
+      const source = await ssb.query.read(options);
 
       const messages = await new Promise((resolve, reject) => {
         pull(
@@ -591,7 +591,7 @@ module.exports = cooler => {
         query
       });
 
-      const source = await cooler.read(ssb.search.query, options);
+      const source = await ssb.search.query(options);
 
       const messages = await new Promise((resolve, reject) => {
         pull(
@@ -624,7 +624,7 @@ module.exports = cooler => {
         private: false
       });
 
-      const source = await cooler.read(ssb.messagesByType, options);
+      const source = await ssb.messagesByType(options);
 
       const messages = await new Promise((resolve, reject) => {
         pull(
@@ -657,7 +657,7 @@ module.exports = cooler => {
         private: false
       });
 
-      const source = await cooler.read(ssb.messagesByType, options);
+      const source = await ssb.messagesByType(options);
 
       const messages = await new Promise((resolve, reject) => {
         pull(
@@ -709,7 +709,7 @@ module.exports = cooler => {
         private: false
       });
 
-      const source = await cooler.read(ssb.messagesByType, options);
+      const source = await ssb.messagesByType(options);
 
       const messages = await new Promise((resolve, reject) => {
         pull(
@@ -811,7 +811,7 @@ module.exports = cooler => {
       const myFeedId = ssb.id;
 
       const options = configure({ id: msgId }, customOptions);
-      const rawMsg = await cooler.get(ssb.get, options);
+      const rawMsg = await ssb.get(options);
 
       debug("got raw message");
 
@@ -1000,7 +1000,7 @@ module.exports = cooler => {
       const myFeedId = ssb.id;
 
       const options = configure({ id: msgId }, customOptions);
-      const rawMsg = await cooler.get(ssb.get, options);
+      const rawMsg = await ssb.get(options);
       debug("got raw message");
 
       const transformed = await transform(ssb, [rawMsg], myFeedId);
@@ -1012,7 +1012,7 @@ module.exports = cooler => {
       const body = { type: "post", ...options };
 
       debug("Published: %O", body);
-      return cooler.get(ssb.publish, body);
+      return ssb.publish(body);
     },
     reply: async ({ parent, message }) => {
       message.root = parent.key;
@@ -1085,7 +1085,7 @@ module.exports = cooler => {
     },
     branch: async ({ root }) => {
       const ssb = await cooler.connect();
-      const keys = await cooler.get(ssb.tangle.branch, root);
+      const keys = await ssb.tangle.branch(root);
 
       return keys;
     },
@@ -1101,7 +1101,7 @@ module.exports = cooler => {
         customOptions
       );
 
-      const source = await cooler.read(ssb.backlinks.read, options);
+      const source = await ssb.backlinks.read(options);
 
       const messages = await new Promise((resolve, reject) => {
         pull(
@@ -1141,9 +1141,9 @@ module.exports = cooler => {
     /** @param {{messageKey: string, value: {}, recps: []}} input */
     publish: async ({ messageKey, value, recps }) => {
       const ssb = await cooler.connect();
-      const branch = await cooler.get(ssb.tangle.branch, messageKey);
+      const branch = await ssb.tangle.branch(messageKey);
 
-      await cooler.get(ssb.publish, {
+      await ssb.publish({
         type: "vote",
         vote: {
           link: messageKey,

@@ -106,25 +106,6 @@ module.exports = ({ offline }) => {
           resolve(handle);
         });
       });
-    },
-    /**
-     * @param {function} method
-     */
-    get(method, ...opts) {
-      return new Promise((resolve, reject) => {
-        method(...opts, (err, val) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(val);
-          }
-        });
-      });
-    },
-    read(method, ...args) {
-      return new Promise(resolve => {
-        resolve(method(...args));
-      });
     }
   };
 };
