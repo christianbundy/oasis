@@ -2,20 +2,13 @@
 
 const flume = require("flumedb");
 const obv = require("obv");
-const path = require("path");
 const pull = require("pull-stream");
 
 let createFakeFilename;
 
 try {
-  const os = require("os");
-  const fs = require("fs");
-
   createFakeFilename = () => {
-    const result = path.join(
-      fs.mkdtempSync(path.join(os.tmpdir(), "ssb-db-")),
-      "log.flumeproxy"
-    );
+    const result = "/tmp/oasis/log.flumeproxy";
     console.log(`saving view to file ${result}`);
     return result;
   };
@@ -101,7 +94,7 @@ const magic = ssb => {
     use: plugin => {
       console.log(`installing ${plugin.name}`);
       if (typeof plugin.init === "function") {
-        ssb[plugin.name] = plugin.init(ssb, { temp: true });
+        ssb[plugin.name] = plugin.init(ssb, {});
       }
       return self;
     },
