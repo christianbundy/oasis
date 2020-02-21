@@ -1,0 +1,6 @@
+#!/bin/sh
+
+BASEDIR="$(dirname $)"
+export PATH="$BASEDIR/vendor/node-v12.16.1-linux-x64/bin/:$PATH"
+
+npm start > /dev/null 2>&1 || rm -rf "$BASEDIR/node_modules" && npm install && npm start
