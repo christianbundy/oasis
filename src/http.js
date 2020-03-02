@@ -2,6 +2,7 @@ const Koa = require("koa");
 const koaStatic = require("koa-static");
 const path = require("path");
 const mount = require("koa-mount");
+const Site = require("@small-tech/site.js");
 
 /**
  * @param {{ host: string, port: number, middleware: [] }} input
@@ -70,5 +71,5 @@ module.exports = ({ host, port, middleware }) => {
   });
 
   middleware.forEach(m => app.use(m));
-  app.listen({ host, port });
+  new Site().createServer(app.callback()).listen({ host, port });
 };

@@ -23,6 +23,7 @@
   "dependencies": {
     "@fraction/base16-css": "^1.1.0",
     "@fraction/flotilla": "^4.0.0",
+    "@small-tech/site.js": "^12.10.4",
     "debug": "^4.1.1",
     "env-paths": "^2.2.0",
     "highlight.js": "^9.18.1",

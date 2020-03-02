@@ -50,7 +50,7 @@ delete config.$0;
 
 const { host } = config;
 const { port } = config;
-const url = `http://${host}:${port}`;
+const url = `https://${host}:${port}`;
 
 if (haveConfig) {
   log(`Configuration read defaults from ${defaultConfigFile}`);
