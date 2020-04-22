@@ -76,9 +76,9 @@ module.exports = (cooler) => {
               const { value, link } = vote;
               if (typeof value === "number" && typeof link === "string") {
                 if (value > 0) {
-                  likesByMessage.add(key, author);
+                  likesByMessage.add(link, author);
                 } else {
-                  likesByMessage.delete(key, author);
+                  likesByMessage.delete(link, author);
                 }
               }
             }
@@ -243,7 +243,7 @@ module.exports = (cooler) => {
     },
     getLikes: (messageId) => {
       if (likesByMessage.has(messageId)) {
-        return likesByMessage.get(messageId);
+        return Array.from(likesByMessage.get(messageId));
       } else {
         return [];
       }
