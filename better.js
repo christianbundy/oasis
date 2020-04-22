@@ -2,23 +2,18 @@ const cooler = require("./src/ssb")({});
 const pull = require("pull-stream");
 
 class MapSet extends Map {
-  constructor() {
-    super();
-    this.oldGet = this.get;
-  }
   add(key, item) {
     if (this.has(key) === false) {
       this.set(key, new Set());
     }
 
-    return this.oldGet(key).add(item);
+    return this.get(key).add(item);
   }
 }
 
 const messagesByType = new MapSet();
 const messagesByAuthor = new MapSet();
 const latestSeqByAuthor = new Map();
-const latestAboutByAuthor = new Map();
 const rootsReferencedByAuthor = new MapSet();
 const nameByAuthor = new Map();
 const imageByAuthor = new Map();
