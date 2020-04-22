@@ -24,9 +24,8 @@ const messagesBySubstring = new MapSet();
 const isVisible = (messageValueContent) =>
   typeof messageValueContent === "object";
 
-const main = async () => {
-  const ssb = await cooler.open();
-
+// Connect to the SSB service and start the stream.
+cooler.open().then((ssb) => {
   // This function runs on every message, and populates the indexes. This seems
   // to be super fast, and my computer (2015 Chromebook Pixel) can process 1
   // million messages in ~55 seconds.
@@ -96,6 +95,7 @@ const main = async () => {
     }
   };
 
+  // After the stream is finished, print some debugging information.
   const onDone = (err) => {
     if (err) throw err;
 
@@ -128,7 +128,6 @@ const main = async () => {
     ssb.close();
   };
 
+  // Start the stream!
   pull(ssb.createLogStream(), pull.drain(onEach, onDone));
-};
-
-main();
+});
