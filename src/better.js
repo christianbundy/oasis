@@ -232,10 +232,9 @@ module.exports = (cooler) => {
     },
     getLikes: (messageId) => {
       if (likesByMessage.has(messageId)) {
-	    console.log(messageId);
-	    console.log(likesByMessage.get(messageId))
 	return likesByMessage.get(messageId);
       } else {
+	console.log('no likes')
 	return []
       }
     }

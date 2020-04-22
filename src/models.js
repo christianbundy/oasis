@@ -463,6 +463,7 @@ module.exports = ({ cooler, isPublic }) => {
         }
 
         // [ @key, @key, @key ]
+	console.log(msg.key)
         const voters = slowStart.getLikes(msg.key)
 
         // get an array of voter names, for display on hover
