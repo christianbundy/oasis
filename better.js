@@ -28,6 +28,8 @@ const imageByAuthor = new Map();
 const descriptionByAuthor = new Map();
 const notificationsForAuthor = new MapSet(); // only for me
 const messagesBySubstring = new MapSet();
+const followingByAuthor = new MapSet();
+const blockingByAuthor = new MapSet();
 
 const isVisible = (messageValueContent) =>
   typeof messageValueContent === "object";
@@ -50,6 +52,19 @@ cooler.open().then((ssb) => {
       messagesByType.add(type, key);
 
       switch (type) {
+        case "contact": {
+          const { contact, following, blocking } = message.value.content;
+          if (contact != null) {
+            if (following) {
+              followingByAuthor.add(author, contact);
+            }
+            if (blocking) {
+              blockingByAuthor.add(author, contact);
+            }
+          }
+
+          break;
+        }
         case "about": {
           const { name, description, image, about } = message.value.content;
           if (about != null && about === author) {
