@@ -775,7 +775,7 @@ const middleware = [
     setLanguage(selectedLanguage);
     await next();
   },
- 
+
   routes,
 ];
 

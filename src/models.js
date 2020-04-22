@@ -10,7 +10,6 @@ const pullSort = require("pull-sort");
 const ssbRef = require("ssb-ref");
 const crypto = require("crypto");
 
-
 const isEncrypted = (message) => typeof message.value.content === "string";
 const isNotEncrypted = (message) => isEncrypted(message) === false;
 
@@ -53,72 +52,21 @@ const configure = (...customOptions) =>
 
 module.exports = ({ cooler, isPublic }) => {
   // HACK
-  const slowStart = require('./better')(cooler)
+  const slowStart = require("./better")(cooler);
 
   const models = {};
 
-  /**
-   * The SSB-About plugin is a thin wrapper around the SSB-Social-Index plugin.
-   * Unfortunately, this plugin has two problems that make it incompatible with
-   * our needs:
-   *
-   * - We want to get the latest value from an author, like what someone calls
-   *   themselves, **not what other people call them**.
-   * - The plugin has a bug where `false` isn't handled correctly, which is very
-   *   important since we use `publicWebHosting`, a boolean field.
-   *
-   * It feels very silly to have to maintain an alternative implementation of
-   * SSB-About, but this is much smaller code and doesn't have either of the
-   * above problems. Maybe this should be moved somewhere else in the future?
-   */
-  const getAbout = async ({ key, feedId }) => {
-    const ssb = await cooler.open();
-
-    const source = ssb.backlinks.read({
-      reverse: true,
-      query: [
-        {
-          $filter: {
-            dest: feedId,
-            value: {
-              author: feedId,
-              content: { type: "about", about: feedId },
-            },
-          },
-        },
-      ],
-    });
-    return new Promise((resolve, reject) =>
-      pull(
-        source,
-        pull.find(
-          (message) => message.value.content[key] !== undefined,
-          (err, message) => {
-            if (err) {
-              reject(err);
-            } else {
-              if (message === null) {
-                resolve(null);
-              } else {
-                resolve(message.value.content[key]);
-              }
-            }
-          }
-        )
-      )
-    );
-  };
-
   // Some of our code expects promises that we don't actually need to promise...
-  const promiseMe = (fn) => (...args) => new Promise((resolve) => resolve(fn(...args)))
+  const promiseMe = (fn) => (...args) =>
+    new Promise((resolve) => resolve(fn(...args)));
 
   models.about = {
     publicWebHosting: promiseMe(slowStart.getPublicWebHosting),
     name: promiseMe((feedId) => {
       if (isPublic && slowStart.getPublicWebHosting(feedId) === false) {
-        return "Redacted"
+        return "Redacted";
       } else {
-	return slowStart.getName(feedId)
+        return slowStart.getName(feedId);
       }
     }),
     image: promiseMe((feedId) => {
@@ -215,20 +163,15 @@ module.exports = ({ cooler, isPublic }) => {
         return { me: true, following: false, blocking: false };
       }
 
-      const isFollowing = await ssb.friends.isFollowing({
-        source: id,
-        dest: feedId,
-      });
-
-      const isBlocking = await ssb.friends.isBlocking({
+      const { following, blocking } = slowStart.getRelationship({
         source: id,
         dest: feedId,
       });
 
       return {
         me: false,
-        following: isFollowing,
-        blocking: isBlocking,
+        following,
+        blocking,
       };
     },
   };
@@ -239,18 +182,7 @@ module.exports = ({ cooler, isPublic }) => {
       const { id } = ssb;
       return id;
     },
-    get: async (msgId) => {
-      const ssb = await cooler.open();
-      return ssb.get({
-        id: msgId,
-        meta: true,
-        private: true,
-      });
-    },
-    status: async () => {
-      const ssb = await cooler.open();
-      return ssb.status();
-    },
+    get: promiseMe(slowStart.getMessage),
     peers: async () => {
       const ssb = await cooler.open();
       const peersSource = await ssb.conn.peers();
@@ -377,82 +309,6 @@ module.exports = ({ cooler, isPublic }) => {
     return conditions.every((x) => x === true);
   };
 
-  const maxMessages = 64;
-
-  const getMessages = async ({
-    myFeedId,
-    customOptions,
-    ssb,
-    query,
-    filter = null,
-  }) => {
-    const options = configure({ query, index: "DTA" }, customOptions);
-
-    const source = ssb.backlinks.read(options);
-    const basicSocialFilter = await socialFilter();
-
-    return new Promise((resolve, reject) => {
-      pull(
-        source,
-        basicSocialFilter,
-        pull.filter(
-          (msg) =>
-            isNotEncrypted(msg) &&
-            isPost(msg) &&
-            (filter == null || filter(msg) === true)
-        ),
-        pull.take(maxMessages),
-        pull.collect((err, collectedMessages) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(transform(ssb, collectedMessages, myFeedId));
-          }
-        })
-      );
-    });
-  };
-
-  /**
-   * Returns a function that filters messages based on who published the message.
-   *
-   * `null` means we don't care, `true` means it must be true, and `false` means
-   * that the value must be false. For example, if you set `me = true` then it
-   * will only allow messages that are from you. If you set `blocking = true`
-   * then you only see message from people you block.
-   */
-  const socialFilter = async ({
-    following = null,
-    blocking = false,
-    me = null,
-  } = {}) => {
-    const ssb = await cooler.open();
-    const { id } = ssb;
-    const relationshipObject = await ssb.friends.get({
-      source: id,
-    });
-
-    const followingList = Object.entries(relationshipObject)
-      .filter(([, val]) => val === true)
-      .map(([key]) => key);
-
-    const blockingList = Object.entries(relationshipObject)
-      .filter(([, val]) => val === false)
-      .map(([key]) => key);
-
-    return pull.filter((message) => {
-      if (message.value.author === id) {
-        return me !== false;
-      } else {
-        return (
-          (following === null ||
-            followingList.includes(message.value.author) === following) &&
-          (blocking === null ||
-            blockingList.includes(message.value.author) === blocking)
-        );
-      }
-    });
-  };
   const transform = (ssb, messages, myFeedId) =>
     Promise.all(
       messages.map(async (msg) => {
@@ -463,8 +319,7 @@ module.exports = ({ cooler, isPublic }) => {
         }
 
         // [ @key, @key, @key ]
-	console.log(msg.key)
-        const voters = slowStart.getLikes(msg.key)
+        const voters = slowStart.getLikes(msg.key);
 
         // get an array of voter names, for display on hover
         const pendingVoterNames = voters.map((author) =>
@@ -550,37 +405,15 @@ module.exports = ({ cooler, isPublic }) => {
     );
 
   const post = {
-    fromPublicFeed: async (feedId, customOptions = {}) => {
-      const ssb = await cooler.open();
+    // messages by author
+    fromPublicFeed: async (feedId) => {
+      const posts = slowStart.getPostsByAuthor(feedId);
 
+      const ssb = await cooler.open();
       const myFeedId = ssb.id;
 
-      const options = configure({ id: feedId }, customOptions);
-
-      const { blocking } = await models.friend.getRelationship(feedId);
-
-      // Avoid streaming any messages from this feed. If we used the social
-      // filter here it would continue streaming all messages from this author
-      // until it consumed the entire feed.
-      if (blocking) {
-        return [];
-      }
-
-      const source = ssb.createHistoryStream(options);
-
-      const messages = await new Promise((resolve, reject) => {
-        pull(
-          source,
-          pull.filter((msg) => isDecrypted(msg) === false && isPost(msg)),
-          pull.take(maxMessages),
-          pull.collect((err, collectedMessages) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(transform(ssb, collectedMessages, myFeedId));
-            }
-          })
-        );
+      const messages = await new Promise((resolve) => {
+        resolve(transform(posts, posts, myFeedId));
       });
 
       return messages;
@@ -588,11 +421,11 @@ module.exports = ({ cooler, isPublic }) => {
     mentionsMe: async (customOptions = {}) => {
       const ssb = await cooler.open();
       const myFeedId = ssb.id;
-      const notifications = slowStart.getNotifications(ssb.id)
+      const notifications = slowStart.getNotifications(ssb.id);
 
       return await new Promise((resolve) => {
-	resolve(transform(ssb, notifications, myFeedId))
-      })
+        resolve(transform(ssb, notifications, myFeedId));
+      });
     },
     fromHashtag: async (hashtag, customOptions = {}) => {
       const ssb = await cooler.open();

@@ -36,6 +36,7 @@ const followingByAuthor = new MapSet();
 const imageByAuthor = new Map();
 const latestSeqByAuthor = new Map();
 const messagesByAuthor = new MapSet();
+const postsByAuthor = new MapSet();
 const nameByAuthor = new Map();
 const notificationsByAuthor = new MapSet(); // only for me
 const publicWebHostingByAuthor = new Map();
@@ -44,7 +45,6 @@ const rootsReferencedByAuthor = new MapSet();
 // Miscellaneous indexes
 const messagesBySubstring = new MapSet();
 const messagesByType = new MapSet();
-
 
 const isVisible = (messageValueContent) =>
   typeof messageValueContent === "object";
@@ -58,102 +58,109 @@ module.exports = (cooler) => {
     const onEach = (message) => {
       const { key } = message;
 
-      valuesByMessage.set(key, message.value)
+      valuesByMessage.set(key, message.value);
       const { author, seq } = message.value;
 
       messagesByAuthor.add(author, key);
       latestSeqByAuthor.set(author, seq);
 
       if (isVisible(message.value.content)) {
-	const { type } = message.value.content;
+        const { type } = message.value.content;
 
-	messagesByType.add(type, key);
+        messagesByType.add(type, key);
 
-	switch (type) {
-	  case "vote": {
-	    const { vote } = message.value.content;
-	    if (typeof vote === 'object') {
-	      const { value, link } = vote;
-	      if (typeof value === 'number' && typeof link === 'string') {
-		if (value > 0) {
-		  likesByMessage.add(key, author)
-		} else {
-		  likesByMessage.delete(key, author)
-		}
-	      }
-	    }
-	    break;
-	  }
-	  case "contact": {
-	    const { contact, following, blocking } = message.value.content;
-	    if (contact != null) {
-	      if (following) {
-		followingByAuthor.add(author, contact);
-	      }
-	      if (blocking) {
-		blockingByAuthor.add(author, contact);
-	      }
-	    }
+        switch (type) {
+          case "vote": {
+            const { vote } = message.value.content;
+            if (typeof vote === "object") {
+              const { value, link } = vote;
+              if (typeof value === "number" && typeof link === "string") {
+                if (value > 0) {
+                  likesByMessage.add(key, author);
+                } else {
+                  likesByMessage.delete(key, author);
+                }
+              }
+            }
+            break;
+          }
+          case "contact": {
+            const { contact, following, blocking } = message.value.content;
+            if (contact != null) {
+              if (following) {
+                followingByAuthor.add(author, contact);
+              }
+              if (blocking) {
+                blockingByAuthor.add(author, contact);
+              }
+            }
 
-	    break;
-	  }
-	  case "about": {
-	    const { name, description, image, about, publicWebHosting } = message.value.content;
-	    if (about != null && about === author) {
-	      if (name != null) {
-		nameByAuthor.set(author, name);
-	      }
-	      if (description != null) {
-		descriptionByAuthor.set(author, description);
-	      }
-	      if (image != null) {
-		if (typeof image === 'string') {
-		  imageByAuthor.set(author, image);
-		} else if (typeof image.link === 'string') {
-		  imageByAuthor.set(author, image.link);
-		}
-	      }
-	      if (publicWebHosting != null) {
-		publicWebHostingByAuthor.set(author, publicWebHosting);
-	      }
-	    }
-	    break;
-	  }
-	  case "post": {
-	    const { root, mentions, text } = message.value.content;
-	    const isValidRoot = typeof root === "string";
+            break;
+          }
+          case "about": {
+            const {
+              name,
+              description,
+              image,
+              about,
+              publicWebHosting,
+            } = message.value.content;
+            if (about != null && about === author) {
+              if (name != null) {
+                nameByAuthor.set(author, name);
+              }
+              if (description != null) {
+                descriptionByAuthor.set(author, description);
+              }
+              if (image != null) {
+                if (typeof image === "string") {
+                  imageByAuthor.set(author, image);
+                } else if (typeof image.link === "string") {
+                  imageByAuthor.set(author, image.link);
+                }
+              }
+              if (publicWebHosting != null) {
+                publicWebHostingByAuthor.set(author, publicWebHosting);
+              }
+            }
+            break;
+          }
+          case "post": {
+            const { root, mentions, text } = message.value.content;
+            const isValidRoot = typeof root === "string";
+            postsByAuthor.add(author, key);
 
-	    if (typeof text === "string" && text.length >= 3) {
-	      const words = text.match(/\w{3,}/g) || [];
-	      words.forEach((word) =>
-		messagesBySubstring.add(word.toLowerCase(), key)
-	      );
-	    }
+            if (typeof text === "string" && text.length >= 3) {
+              const words = text.match(/\w{3,}/g) || [];
+              words.forEach((word) =>
+                messagesBySubstring.add(word.toLowerCase(), key)
+              );
+            }
 
-	    // Only index conversations that I'm a part of.
-	    if (isValidRoot && author === ssb.id) {
-	      rootsReferencedByAuthor.add(author, root);
-	    }
+            // Only index conversations that I'm a part of.
+            if (isValidRoot && author === ssb.id) {
+              rootsReferencedByAuthor.add(author, root);
+            }
 
-	    const mentionsMe =
-	    Array.isArray(mentions) &&
-	    mentions.map((x) => x.link).includes(ssb.id);
+            const mentionsMe =
+              Array.isArray(mentions) &&
+              mentions.map((x) => x.link).includes(ssb.id);
 
-	    if (mentionsMe) {
-	      notificationsByAuthor.add(ssb.id, key);
-	    } else {
-	      if (isValidRoot) {
-		if (rootsReferencedByAuthor.has(ssb.id)) {
-		  if (rootsReferencedByAuthor.get(ssb.id).has(root)) {
-		    notificationsByAuthor.add(ssb.id, key);
-		  }
-		}
-	      }
-	    }
+            if (mentionsMe) {
+              notificationsByAuthor.add(ssb.id, key);
+            } else {
+              if (isValidRoot) {
+                if (rootsReferencedByAuthor.has(ssb.id)) {
+                  if (rootsReferencedByAuthor.get(ssb.id).has(root)) {
+                    notificationsByAuthor.add(ssb.id, key);
+                  }
+                }
+              }
+            }
 
-	    break;
-	  }
-	}
+            break;
+          }
+        }
       }
     };
 
@@ -161,24 +168,24 @@ module.exports = (cooler) => {
     const onDone = (err) => {
       if (err) throw err;
 
-	  let notifications = notificationsByAuthor.get(ssb.id)
+      let notifications = notificationsByAuthor.get(ssb.id);
       console.log({
-	name: nameByAuthor.get(ssb.id),
-	description: descriptionByAuthor.get(ssb.id),
-	image: imageByAuthor.get(ssb.id),
-	notifications: notifications ? notifications.size : 0,
+        name: nameByAuthor.get(ssb.id),
+        description: descriptionByAuthor.get(ssb.id),
+        image: imageByAuthor.get(ssb.id),
+        notifications: notifications ? notifications.size : 0,
       });
 
       console.log(
-	"Number of posts with the word pizza:",
-	messagesBySubstring.get("pizza").size
+        "Number of posts with the word pizza:",
+        messagesBySubstring.get("pizza").size
       );
 
       const used = process.memoryUsage();
       for (let key in used) {
-	console.log(
-	  `${key} ${Math.round((used[key] / 1024 / 1024) * 100) / 100} MB`
-	);
+        console.log(
+          `${key} ${Math.round((used[key] / 1024 / 1024) * 100) / 100} MB`
+        );
       }
 
       // Run with:
@@ -193,53 +200,76 @@ module.exports = (cooler) => {
 
     // Start the stream!
     pull(ssb.createLogStream(), pull.drain(onEach, onDone));
-  })
+  });
 
   const nullImage = `&${"0".repeat(43)}=.sha256`;
+  const maxMessages = 64;
 
   const api = {
     getName: (feedId) => {
       if (nameByAuthor.has(feedId)) {
-	return nameByAuthor.get(feedId)
+        return nameByAuthor.get(feedId);
       } else {
-	return feedId
+        return feedId;
       }
     },
     getImage: (feedId) => {
       if (imageByAuthor.has(feedId)) {
-	return imageByAuthor.get(feedId)
+        return imageByAuthor.get(feedId);
       } else {
-	return nullImage;
+        return nullImage;
       }
     },
     getDescription: (feedId) => {
       if (descriptionByAuthor.has(feedId)) {
-	return descriptionByAuthor.get(feedId)
+        return descriptionByAuthor.get(feedId);
       } else {
-	return "";
+        return "";
       }
     },
     getPublicWebHosting: (feedId) =>
-    publicWebHostingByAuthor.has(feedId) &&
-    publicWebHostingByAuthor.get(feedId) === true,
+      publicWebHostingByAuthor.has(feedId) &&
+      publicWebHostingByAuthor.get(feedId) === true,
     getNotifications: (feedId) => {
       if (notificationsByAuthor.has(feedId)) {
-	const notifications = notificationsByAuthor.get(feedId);
-	const tail = Array.from(notifications).slice(notifications.size - 64)
-	return tail.map((key) => ({key, value: valuesByMessage.get(key)})).reverse()
+        const notifications = notificationsByAuthor.get(feedId);
+        const tail = Array.from(notifications).slice(
+          notifications.size - maxMessages
+        );
+        return tail.map(api.getMessage).reverse();
       } else {
-	return [];
+        return [];
       }
     },
     getLikes: (messageId) => {
       if (likesByMessage.has(messageId)) {
-	return likesByMessage.get(messageId);
+        return likesByMessage.get(messageId);
       } else {
-	console.log('no likes')
-	return []
+        return [];
       }
-    }
-  }
+    },
+    getRelationship: ({ source, dest }) => ({
+      following:
+        followingByAuthor.has(source) &&
+        followingByAuthor.get(source).has(dest) === true,
+      blocking:
+        blockingByAuthor.has(source) &&
+        blockingByAuthor.get(source).has(dest) === true,
+    }),
+    getMessage: (messageId) => ({
+      key: messageId,
+      value: valuesByMessage.get(messageId),
+    }),
+    getPostsByAuthor: (feedId) => {
+      if (postsByAuthor.has(feedId)) {
+        const posts = postsByAuthor.get(feedId);
+        const tail = Array.from(posts).slice(posts.size - maxMessages);
+        return tail.map(api.getMessage).reverse();
+      } else {
+        return [];
+      }
+    },
+  };
 
-  return api
+  return api;
 };

@@ -40,7 +40,6 @@ const log = (formatter, ...args) => {
 const connect = (options) =>
   new Promise((resolve, reject) => {
     const onSuccess = (api) => {
-  
       resolve(api);
     };
 
