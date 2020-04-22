@@ -195,7 +195,9 @@ module.exports = (cooler) => {
       // - Type `repl` and take a look at the indexes.
       debugger;
 
-      // ssb.close();
+      if (module.parent == null) {
+        ssb.close();
+      }
     };
 
     // Start the stream!
@@ -273,3 +275,9 @@ module.exports = (cooler) => {
 
   return api;
 };
+
+// Useful for benchmarking
+if (module.parent == null) {
+  const cooler = require("./ssb")({ offline: true });
+  module.exports(cooler);
+}
