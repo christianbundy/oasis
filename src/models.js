@@ -10,6 +10,7 @@ const pullSort = require("pull-sort");
 const ssbRef = require("ssb-ref");
 const crypto = require("crypto");
 
+
 const isEncrypted = (message) => typeof message.value.content === "string";
 const isNotEncrypted = (message) => isEncrypted(message) === false;
 
@@ -51,6 +52,9 @@ const configure = (...customOptions) =>
   Object.assign({}, defaultOptions, ...customOptions);
 
 module.exports = ({ cooler, isPublic }) => {
+  // HACK
+  const slowStart = require('./better')(cooler)
+
   const models = {};
 
   /**
@@ -105,56 +109,31 @@ module.exports = ({ cooler, isPublic }) => {
     );
   };
 
+  // Some of our code expects promises that we don't actually need to promise...
+  const promiseMe = (fn) => (...args) => new Promise((resolve) => resolve(fn(...args)))
+
   models.about = {
-    publicWebHosting: async (feedId) => {
-      const result = await getAbout({
-        key: "publicWebHosting",
-        feedId,
-      });
-      return result === true;
-    },
-    name: async (feedId) => {
-      if (isPublic && (await models.about.publicWebHosting(feedId)) === false) {
-        return "Redacted";
+    publicWebHosting: promiseMe(slowStart.getPublicWebHosting),
+    name: promiseMe((feedId) => {
+      if (isPublic && slowStart.getPublicWebHosting(feedId) === false) {
+        return "Redacted"
+      } else {
+	return slowStart.getName(feedId)
       }
-
-      return (
-        (await getAbout({
-          key: "name",
-          feedId,
-        })) || feedId.slice(1, 1 + 8)
-      ); // First 8 chars of public key
-    },
-    image: async (feedId) => {
-      if (isPublic && (await models.about.publicWebHosting(feedId)) === false) {
+    }),
+    image: promiseMe((feedId) => {
+      if (isPublic && slowStart.getPublicWebHosting(feedId) === false) {
         return nullImage;
+      } else {
+        return slowStart.getImage(feedId);
       }
-
-      const raw = await getAbout({
-        key: "image",
-        feedId,
-      });
-
-      if (raw == null || raw.link == null) {
-        return nullImage;
-      }
-
-      if (typeof raw.link === "string") {
-        return raw.link;
-      }
-      return raw;
-    },
+    }),
     description: async (feedId) => {
-      if (isPublic && (await models.about.publicWebHosting(feedId)) === false) {
+      if (isPublic && slowStart.getPublicWebHosting(feedId) === false) {
         return "Redacted";
+      } else {
+        return slowStart.getDescription(feedId);
       }
-
-      const raw =
-        (await getAbout({
-          key: "description",
-          feedId,
-        })) || "";
-      return raw;
     },
   };
 
@@ -483,54 +462,8 @@ module.exports = ({ cooler, isPublic }) => {
           return null;
         }
 
-        const filterQuery = {
-          $filter: {
-            dest: msg.key,
-          },
-        };
-
-        const referenceStream = ssb.backlinks.read({
-          query: [filterQuery],
-          index: "DTA", // use asserted timestamps
-          private: true,
-          meta: true,
-        });
-
-        const rawVotes = await new Promise((resolve, reject) => {
-          pull(
-            referenceStream,
-            pull.filter(
-              (ref) =>
-                isNotEncrypted(ref) &&
-                ref.value.content.type === "vote" &&
-                ref.value.content.vote &&
-                typeof ref.value.content.vote.value === "number" &&
-                ref.value.content.vote.value >= 0 &&
-                ref.value.content.vote.link === msg.key
-            ),
-            pull.collect((err, collectedMessages) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(collectedMessages);
-              }
-            })
-          );
-        });
-
-        // { @key: 1, @key2: 0, @key3: 1 }
-        //
-        // only one vote per person!
-        const reducedVotes = rawVotes.reduce((acc, vote) => {
-          acc[vote.value.author] = vote.value.content.vote.value;
-          return acc;
-        }, {});
-
-        // gets *only* the people who voted 1
         // [ @key, @key, @key ]
-        const voters = Object.entries(reducedVotes)
-          .filter(([, value]) => value === 1)
-          .map(([key]) => key);
+        const voters = slowStart.getLikes(msg.key)
 
         // get an array of voter names, for display on hover
         const pendingVoterNames = voters.map((author) =>
@@ -653,28 +586,12 @@ module.exports = ({ cooler, isPublic }) => {
     },
     mentionsMe: async (customOptions = {}) => {
       const ssb = await cooler.open();
-
       const myFeedId = ssb.id;
+      const notifications = slowStart.getNotifications(ssb.id)
 
-      const query = [
-        {
-          $filter: {
-            dest: myFeedId,
-          },
-        },
-      ];
-
-      const messages = await getMessages({
-        myFeedId,
-        customOptions,
-        ssb,
-        query,
-        filter: (msg) =>
-          msg.value.author !== myFeedId &&
-          lodash.get(msg, "value.meta.private") !== true,
-      });
-
-      return messages;
+      return await new Promise((resolve) => {
+	resolve(transform(ssb, notifications, myFeedId))
+      })
     },
     fromHashtag: async (hashtag, customOptions = {}) => {
       const ssb = await cooler.open();
