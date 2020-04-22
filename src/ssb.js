@@ -8,7 +8,6 @@ const { promisify } = require("util");
 const ssbClient = require("ssb-client");
 const ssbConfig = require("ssb-config");
 const flotilla = require("@fraction/flotilla");
-const ssbTangle = require("ssb-tangle");
 const debug = require("debug")("oasis");
 const path = require("path");
 const pull = require("pull-stream");
@@ -41,18 +40,7 @@ const log = (formatter, ...args) => {
 const connect = (options) =>
   new Promise((resolve, reject) => {
     const onSuccess = (api) => {
-      if (api.tangle === undefined) {
-        // HACK: SSB-Tangle isn't available in Patchwork, but we want that
-        // compatibility. This code automatically injects SSB-Tangle into our
-        // stack so that we don't get weird errors when using Patchwork.
-        //
-        // See: https://github.com/fraction/oasis/issues/21
-        api.tangle = ssbTangle.init(api);
-
-        // MuxRPC supports promises but the raw plugin does not.
-        api.tangle.branch = promisify(api.tangle.branch);
-      }
-
+  
       resolve(api);
     };
 

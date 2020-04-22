@@ -161,11 +161,12 @@ module.exports = (cooler) => {
     const onDone = (err) => {
       if (err) throw err;
 
+	  let notifications = notificationsByAuthor.get(ssb.id)
       console.log({
 	name: nameByAuthor.get(ssb.id),
 	description: descriptionByAuthor.get(ssb.id),
 	image: imageByAuthor.get(ssb.id),
-	notifications: notificationsByAuthor.get(ssb.id).size,
+	notifications: notifications ? notifications.size : 0,
       });
 
       console.log(

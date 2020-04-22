@@ -566,7 +566,7 @@ module.exports = ({ cooler, isPublic }) => {
         return [];
       }
 
-      const source = ssb.createUserStream(options);
+      const source = ssb.createHistoryStream(options);
 
       const messages = await new Promise((resolve, reject) => {
         pull(
@@ -770,6 +770,7 @@ module.exports = ({ cooler, isPublic }) => {
 
       const myFeedId = ssb.id;
 
+      // could use byType + filtering
       const source = ssb.query.read(
         configure({
           query: [
@@ -1423,7 +1424,7 @@ module.exports = ({ cooler, isPublic }) => {
     },
     branch: async ({ root }) => {
       const ssb = await cooler.open();
-      const keys = await ssb.tangle.branch(root);
+      const keys = await ssb.tangles(root);
 
       return keys;
     },
