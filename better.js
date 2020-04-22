@@ -1,6 +1,14 @@
 const cooler = require("./src/ssb")({});
 const pull = require("pull-stream");
 
+// A map (like an object) where the values are sets (like arrays).
+//
+// If you convert the map to an object and sets to arrays, it'd look like:
+//
+//     { "a": [0, 1, 2], "b": [3, 4, 5] }
+//
+// For example, in `messagesByType` the map keys are message keys and the set
+// is a list of message keys that have that type.
 class MapSet extends Map {
   add(key, item) {
     if (this.has(key) === false) {
