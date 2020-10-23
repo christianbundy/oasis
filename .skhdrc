@@ -1,13 +1,46 @@
-# window focus
+# alt - return : open a terminal
+alt - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
+
+# alt - (hjkl) : move focus to window
 alt - k : yabai -m window --focus north
 alt - j : yabai -m window --focus south
 alt - h : yabai -m window --focus west
 alt - l : yabai -m window --focus east
 
-# display focus
-alt + shift - h : yabai -m display --focus west
-alt + shift - l : yabai -m display --focus east
-alt + shift - k : yabai -m display --focus north
-alt + shift - j : yabai -m display --focus south
+# alt + shift - (hjkl) : move window to position
+alt + shift - h : yabai -m window --warp west
+alt + shift - l : yabai -m window --warp east
+alt + shift - k : yabai -m window --warp north
+alt + shift - j : yabai -m window --warp south
 
+# ctrl + alt - (hjkl) : move focus to display
+ctrl + alt - k : yabai -m display --focus north
+ctrl + alt - j : yabai -m display --focus south
+ctrl + alt - h : yabai -m display --focus west
+ctrl + alt - l : yabai -m display --focus east
+
+# ctrl + alt + shift - (hjkl) : move window to display
+ctrl + alt + shift - h : yabai -m window --display west --focus && \
+                         yabai -m display --focus west
+ctrl + alt + shift - l : yabai -m window --display east --focus && \
+                         yabai -m display --focus east
+ctrl + alt + shift - k : yabai -m window --display north --focus && \
+                         yabai -m display --focus north
+ctrl + alt + shift - j : yabai -m window --display south --focus && \
+                         yabai -m display --focus south
+
+# rotate windows
 alt - r : yabai -m space --rotate 90
+
+# split
+alt - s : yabai -m window --toggle split
+
+# fullscreen
+alt - f : yabai -m window --toggle zoom-parent
+
+# fullscreen
+alt - c : /Applications/Chromum.app/Contents/MacOS/chromium
+
+# close
+alt + shift - q : yabai -m window --close
+
