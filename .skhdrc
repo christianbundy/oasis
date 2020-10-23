@@ -41,3 +41,6 @@ alt - f : yabai -m window --toggle zoom-parent
 # close
 alt + shift - q : yabai -m window --close
 
+# application launcher
+alt - d : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~ zsh -c \
+          'open "$(for f in /Applications/*.app; do echo "$f"; done | fzf)"'
