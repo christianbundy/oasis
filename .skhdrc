@@ -43,4 +43,4 @@ alt + shift - q : yabai -m window --close
 
 # application launcher
 alt - d : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~ zsh -c \
-          'open "$(for f in /Applications/*.app; do echo "$f"; done | fzf)"'
+          'x="$(for f in /Applications/*.app; do echo "$f"; done | fzf)"; [[ !  -z  "$x"  ]] && open "$x"'
