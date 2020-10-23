@@ -38,9 +38,6 @@ alt - s : yabai -m window --toggle split
 # fullscreen
 alt - f : yabai -m window --toggle zoom-parent
 
-# fullscreen
-alt - c : /Applications/Chromum.app/Contents/MacOS/chromium
-
 # close
 alt + shift - q : yabai -m window --close
 
