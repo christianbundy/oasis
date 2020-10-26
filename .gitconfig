@@ -3,3 +3,5 @@
 # Please adapt and uncomment the following lines:
 	name = Christian Bundy
 	email = christian@truework.com
+[init]
+	defaultBranch = main
