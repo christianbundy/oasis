@@ -1,3 +1,6 @@
 [submodule ".config/kitty/kitty-themes"]
 	path = .config/kitty/kitty-themes
 	url = https://github.com/dexpota/kitty-themes.git
+[submodule ".vim/pack/plugins/start/vim-polyglot"]
+	path = .vim/pack/plugins/start/vim-polyglot
+	url = https://github.com/sheerun/vim-polyglot
