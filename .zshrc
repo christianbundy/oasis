@@ -10,7 +10,10 @@ eval "$(starship init zsh)"
 
 # zoxide
 eval "$(zoxide init zsh)"
-alias cd="z"
+
+# case-insensitive (APFS)
+# https://github.com/ajeetdsouza/zoxide/issues/114
+export _ZO_RESOLVE_SYMLINKS=1
 
 # zsh plugins
 if type brew &>/dev/null; then
@@ -36,6 +39,5 @@ fi
 
 alias today="vim /Users/christianbundy/Documents/$(date '+%Y-%m-%d').md"
 export PATH="/usr/local/sbin:$PATH"
-
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
