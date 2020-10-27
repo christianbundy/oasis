@@ -5,3 +5,5 @@
 	email = christian@truework.com
 [init]
 	defaultBranch = main
+[pull]
+	rebase = false
