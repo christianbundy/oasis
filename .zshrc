@@ -15,8 +15,19 @@ alias cd="z"
 # zsh plugins
 if type brew &>/dev/null; then
   brew_prefix="$(brew --prefix)"
-  source ${brew_prefix}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  source ${brew_prefix}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+  zsh_plugins=(
+    syntax-highlighting
+    autosuggestions
+  )
+
+  for plugin in $zsh_plugins; do
+    plugin_path=${brew_prefix}/share/zsh-${plugin}/zsh-${plugin}.zsh
+    if [[ -f $plugin_path ]]; then
+      source $plugin_path
+    fi
+  done
+
   FPATH=${brew_prefix}/share/zsh-completions:$FPATH
 
   autoload -Uz compinit
