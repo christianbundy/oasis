@@ -8,6 +8,10 @@ alias ls='exa'
 # starship
 eval "$(starship init zsh)"
 
+# zoxide
+eval "$(zoxide init zsh)"
+alias cd="z"
+
 # zsh plugins
 if type brew &>/dev/null; then
   brew_prefix="$(brew --prefix)"
