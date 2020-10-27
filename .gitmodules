@@ -7,3 +7,4 @@
 [submodule ".vim/pack/plugins/start/coc"]
 	path = .vim/pack/plugins/start/coc
 	url = https://github.com/neoclide/coc.nvim.git
+	branch = release
