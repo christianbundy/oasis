@@ -49,6 +49,8 @@ alias dates="print -l ~/Documents/*<0-99>-<0-12>-<0-31>.md"
 alias today="vim /Users/christianbundy/Documents/$(date '+%Y-%m-%d').md"
 alias yesterday='vim $(dates | tail -n 1)'
 alias journal='cat $(dates)'
-export PATH="/usr/local/sbin:$PATH"
+
+export NON_LOCAL_PATH="$PATH"
+export PATH="$(print -l ~)/.local/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
