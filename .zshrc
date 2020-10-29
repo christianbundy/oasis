@@ -11,9 +11,14 @@ eval "$(starship init zsh)"
 # zoxide
 eval "$(zoxide init zsh)"
 
-# case-insensitive (APFS)
-# https://github.com/ajeetdsouza/zoxide/issues/114
+# Case-insensitive (APFS) -- Zsh
+# <http://zsh.sourceforge.net/Doc/Release/Completion-System.html>
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+
+# Case-insensitive (APFS) -- Zoxide
+# <https://github.com/ajeetdsouza/zoxide/issues/114>
 export _ZO_RESOLVE_SYMLINKS=1
+
 
 # zsh plugins
 if type brew &>/dev/null; then
