@@ -42,7 +42,13 @@ if type brew &>/dev/null; then
   compinit
 fi
 
+# Print all documents with ISO-8601 dates.
+alias dates="print -l ~/Documents/*<0-99>-<0-12>-<0-31>.md"
+
+# Edit file with today's date.
 alias today="vim /Users/christianbundy/Documents/$(date '+%Y-%m-%d').md"
+alias yesterday='vim $(dates | tail -n 1)'
+alias journal='cat $(dates)'
 export PATH="/usr/local/sbin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
