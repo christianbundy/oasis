@@ -16,7 +16,10 @@ if (allowList.length === 0) {
   process.exit(1)
 }
 
-const output = allowList
+const output = [
+  '# Warning: File is generated from .gitallow, do not edit.',
+  '# <https://github.com/christianbundy/dotfiles/blob/master/.local/bin/gitallow>',
+  ...allowList
   .sort()
   .map((pathString) => ['/', ...pathString.split(path.sep).filter(notEmpty)
   ])
@@ -36,6 +39,6 @@ const output = allowList
     ["/*"]
   )
   .filter((item, index, array) => array.indexOf(item) === index)
-  .join("\n");
+].join("\n");
 
 fs.writeFileSync(gitignore, output)
