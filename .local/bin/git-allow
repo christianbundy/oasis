@@ -1,0 +1,6 @@
+#!/bin/sh
+top_level="$(git rev-parse --show-toplevel)"
+echo $top_level
+printf '%s\n' "$1" >> "${top_level}/.gitallow"
+gitallow
+git add "$1"
