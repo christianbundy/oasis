@@ -1,2 +1,2 @@
 #!/bin/sh
-PATH="$NON_LOCAL_PATH" fd $@
+original fd $@
