@@ -7,41 +7,40 @@ const gitallow = path.join(process.cwd(), ".gitallow");
 const gitignore = path.join(process.cwd(), ".gitignore");
 
 const notEmpty = (x) => x.length > 0;
+const unique = (item, index, array) => array.indexOf(item) === index;
 
 const allowList = fs
   .readFileSync(gitallow, "utf8")
   .split("\n")
   .filter(notEmpty);
 
-if (allowList.length === 0) {
-  console.log("Usage: gitallow <...path>");
-  console.log("Example: gitallow .local/bin .zshrc .vimrc");
-  process.exit(1);
-}
+// I don't think this changes on other operating systems.
+const sep = "/";
+const ignoreAll = `${sep}*`;
 
 const output = [
   "# Warning: File is generated from .gitallow, do not edit.",
   "# <https://github.com/christianbundy/dotfiles/blob/master/.local/bin/gitallow>",
+  ignoreAll,
   ...allowList
     .sort()
-    .map((pathString) => ["/", ...pathString.split(path.sep).filter(notEmpty)])
-    .reduce(
-      (lines, pathParts) => {
-        pathParts.reduce((acc, cur, index) => {
-          if (index > 0) {
-            lines.push(`!${path.join(...acc, cur)}`);
-            if (index < pathParts.length - 1) {
-              lines.push(path.join(...acc, cur, "*"));
-            }
-          }
-          return [...acc, cur];
-        });
+    .map((pathString) => [...pathString.split(sep).filter(notEmpty)])
+    .reduce((lines, pathParts) => {
+      const allow = (s) => lines.push(["!", ...s].join("/"));
+      const deny = (s) => lines.push(["", ...s, "*"].join("/"));
 
-        return lines;
-      },
-      ["/*"]
-    )
-    .filter((item, index, array) => array.indexOf(item) === index),
+      pathParts.reduce((acc, cur, index) => {
+        const currentPathParts = [...acc, cur];
+        allow(currentPathParts);
+        if (index < pathParts.length - 1) {
+          deny(currentPathParts);
+        }
+        return [...acc, cur];
+      }, []);
+
+      return lines;
+    }, [])
+    .filter(unique),
 ].join("\n");
 
 fs.writeFileSync(gitignore, output);

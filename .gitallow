@@ -8,7 +8,7 @@
 .local/bin
 .local/share/brew
 .skhdrc
-.vim/pack/
+.vim/pack
 .vimrc
 .yabairc
 .zshrc
