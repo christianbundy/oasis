@@ -8,3 +8,15 @@
 	path = .vim/pack/plugins/start/coc
 	url = https://github.com/neoclide/coc.nvim.git
 	branch = release
+[submodule ".config/zsh/zsh-completions"]
+	path = .config/zsh/zsh-completions
+	url = git://github.com/zsh-users/zsh-completions.git
+[submodule ".config/zsh/syntax-highlighting"]
+	path = .config/zsh/syntax-highlighting
+	url = git://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule ".config/zsh/autosuggestions"]
+	path = .config/zsh/autosuggestions
+	url = git://github.com/zsh-users/zsh-autosuggestions.git
+[submodule ".config/zsh/completions"]
+	path = .config/zsh/completions
+	url = git://github.com/zsh-users/zsh-completions.git

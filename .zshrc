@@ -18,27 +18,16 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 export _ZO_RESOLVE_SYMLINKS=1
 
 # zsh plugins
-if type brew &>/dev/null; then
-  brew_prefix="$(brew --prefix)"
+zsh_plugins=(
+  syntax-highlighting
+  autosuggestions
+)
 
-  zsh_plugins=(
-    syntax-highlighting
-    autosuggestions
-  )
+for plugin in $zsh_plugins; do
+  source ${HOME}/.config/zsh/${plugin}/zsh-${plugin}.zsh
+done
 
-  for plugin in $zsh_plugins; do
-    plugin_path=${brew_prefix}/share/zsh-${plugin}/zsh-${plugin}.zsh
-    if [[ -f $plugin_path ]]; then
-      source $plugin_path
-    fi
-  done
-
-  FPATH=${brew_prefix}/share/zsh-completions:$FPATH
-
-  autoload -Uz compinit
-  compinit
-fi
-
+FPATH=${brew_prefix}/share/zsh-completions:${HOME}/.config/zsh/completions/src:$FPATH
 
 # See `.local/bin/original`
 export ORIGINAL_PATH="$PATH"
@@ -46,3 +35,6 @@ export PATH="$(print -l ~)/.local/bin:$ORIGINAL_PATH"
 export VISUAL="$(which vim)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+autoload -Uz compinit
+compinit

@@ -6,6 +6,7 @@
 !/.config
 /.config/*
 !/.config/kitty
+!/.config/zsh
 !/.fzf.zsh
 !/.gitallow
 !/.gitconfig
