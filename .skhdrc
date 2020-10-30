@@ -42,5 +42,5 @@ alt - f : yabai -m window --toggle zoom-parent
 alt + shift - q : yabai -m window --close
 
 # application launcher (dmenu-ish)
-alt - d : /Applications/kitty.app/Contents/MacOS/kitty ~/.local/bin/fzf-launcher
+alt - d : /Applications/kitty.app/Contents/MacOS/kitty --single-instance ~/.local/bin/fzf-launcher
           
