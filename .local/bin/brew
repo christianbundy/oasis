@@ -1,7 +1,8 @@
 #!/bin/sh
-
-if [[ $1 == install || $1 == upgrade ]]; then
-  original brew $1 --build-from-source ${@:3}
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+  brew_command="$1"
+  shift # remove brew_command from $@
+  original brew "$brew_command" --build-from-source "$@"
 else
-  original brew $@
+  original brew "$@"
 fi;

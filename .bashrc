@@ -7,6 +7,10 @@ eval "$(starship init bash)"
 eval "$(zoxide init bash)"
 
 # See `.local/bin/original`
-export ORIGINAL_PATH="$PATH"
-export PATH="$(print -l ~)/.local/bin:$PATH"
-export VISUAL="$(which vim)"
+ORIGINAL_PATH="$PATH"
+PATH="${HOME}/.local/bin:$ORIGINAL_PATH"
+VISUAL="$(which vim)"
+
+export \
+  ORIGINAL_PATH \
+  VISUAL

@@ -1,5 +1,7 @@
+#!/usr/bin/env zsh
+
 # Vim key-bindings
-bindkey -v
+# bindkey -v
 
 # starship
 eval "$(starship init zsh)"
@@ -14,7 +16,6 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 # Case-insensitive (APFS) -- Zoxide
 # <https://github.com/ajeetdsouza/zoxide/issues/114>
 export _ZO_RESOLVE_SYMLINKS=1
-
 
 # zsh plugins
 if type brew &>/dev/null; then
@@ -41,8 +42,7 @@ fi
 
 # See `.local/bin/original`
 export ORIGINAL_PATH="$PATH"
-export PATH="$(print -l ~)/.local/bin:$PATH"
-
+export PATH="$(print -l ~)/.local/bin:$ORIGINAL_PATH"
 export VISUAL="$(which vim)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
