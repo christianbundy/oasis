@@ -3,44 +3,52 @@
 const path = require("path");
 const fs = require("fs");
 
+// Constants
+const sep = "/";
+const wildcard = "*";
+const not = "!";
+const newline = "\n";
+const ignoreAll = `${sep}*`;
+const warning = `Warning: File is generated from .gitallow, do not edit.
+<https://github.com/christianbundy/dotfiles/blob/master/.local/bin/gitallow>`;
+const utf8 = "utf8";
+
+// Paths
 const gitallow = path.join(process.cwd(), ".gitallow");
 const gitignore = path.join(process.cwd(), ".gitignore");
 
+// Functions
 const notEmpty = (x) => x.length > 0;
 const unique = (item, index, array) => array.indexOf(item) === index;
+const notNull = (x) => x !== null;
+const comment = (s) => s.split(newline).map((s) => `# ${s}`);
+const allow = (a) => [not, ...a].join(sep); // !/a
+const deny = (a) => [, ...a, wildcard].join(sep); // /a/*
 
-const allowList = fs
-  .readFileSync(gitallow, "utf8")
-  .split("\n")
-  .filter(notEmpty);
+fs.writeFileSync(
+  gitignore,
+  [
+    ...comment(warning),
+    ignoreAll,
+    ...fs
+      .readFileSync(gitallow, utf8)
+      .split(newline)
+      .filter(notEmpty)
+      .sort()
+      .map((pathString) => [...pathString.split(sep).filter(notEmpty)])
+      .map((pathParts) =>
+        pathParts.reduce((acc, _, index, array) => {
+          const fragment = array.slice(0, index + 1);
 
-// I don't think this changes on other operating systems.
-const sep = "/";
-const ignoreAll = `${sep}*`;
-
-const output = [
-  "# Warning: File is generated from .gitallow, do not edit.",
-  "# <https://github.com/christianbundy/dotfiles/blob/master/.local/bin/gitallow>",
-  ignoreAll,
-  ...allowList
-    .sort()
-    .map((pathString) => [...pathString.split(sep).filter(notEmpty)])
-    .reduce((lines, pathParts) => {
-      const allow = (s) => lines.push(["!", ...s].join("/"));
-      const deny = (s) => lines.push(["", ...s, "*"].join("/"));
-
-      pathParts.reduce((acc, cur, index) => {
-        const currentPathParts = [...acc, cur];
-        allow(currentPathParts);
-        if (index < pathParts.length - 1) {
-          deny(currentPathParts);
-        }
-        return [...acc, cur];
-      }, []);
-
-      return lines;
-    }, [])
-    .filter(unique),
-].join("\n");
-
-fs.writeFileSync(gitignore, output);
+          return [
+            ...acc,
+            allow(fragment),
+            index < pathParts.length - 1 ? deny(fragment) : null,
+          ];
+        }, [])
+      )
+      .flat()
+      .filter(unique)
+      .filter(notNull),
+  ].join(newline)
+);
