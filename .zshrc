@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # Vim key-bindings
-# bindkey -v
+bindkey -v
 
 # starship
 eval "$(starship init zsh)"
