@@ -6,6 +6,7 @@
 .gitconfig
 .gitignore
 .gitmodules
+.inputrc
 .local/bin
 .local/share/brew
 .skhdrc
