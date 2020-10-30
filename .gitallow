@@ -1,0 +1,15 @@
+.alacritty.yml
+.config/kitty/kitty-themes
+.config/kitty/kitty.conf
+.config/kitty/theme.conf
+.fzf.zsh
+.gitallow
+.gitconfig
+.gitignore
+.gitmodules
+.local/bin
+.skhdrc
+.vim/pack/plugins/start
+.vimrc
+.yabairc
+.zshrc
