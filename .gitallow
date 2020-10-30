@@ -1,4 +1,5 @@
 .alacritty.yml
+.bashrc
 .config/kitty
 .fzf.zsh
 .gitallow

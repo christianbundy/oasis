@@ -2,6 +2,7 @@
 # <https://github.com/christianbundy/dotfiles/blob/master/.local/bin/gitallow>
 /*
 !/.alacritty.yml
+!/.bashrc
 !/.config
 /.config/*
 !/.config/kitty
