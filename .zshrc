@@ -53,4 +53,6 @@ alias journal='cat $(dates)'
 export NON_LOCAL_PATH="$PATH"
 export PATH="$(print -l ~)/.local/bin:$PATH"
 
+export VISUAL="$(which vim)"
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
