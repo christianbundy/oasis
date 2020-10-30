@@ -1,0 +1,8 @@
+#!/bin/sh
+PATH="$NON_LOCAL_PATH"
+
+if [[ $1 == install || $1 == upgrade ]]; then
+  brew $1 --build-from-source ${@:3}
+else
+  brew $@
+fi;
