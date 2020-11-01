@@ -40,7 +40,6 @@ with open(gitallow, 'r+') as file:
         fragments = item.split("/")
         for index, _ in enumerate(fragments):
             fragment = "/" + "/".join(fragments[0:index + 1])
-            print(fragment)
             allow = "!" + fragment
             deny = fragment + "/*"
             if allow not in output:
