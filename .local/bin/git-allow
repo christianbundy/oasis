@@ -48,8 +48,8 @@ with open(gitallow, 'r+') as file:
                     output.append(deny)
 
     file.seek(0)
-    file.write("\n".join(allow_list))
+    file.write("\n".join(allow_list) + "\n")
     file.truncate()
 
 with open(gitignore, 'w') as file:
-    file.write("\n".join(output))
+    file.write("\n".join(output) + "\n")
