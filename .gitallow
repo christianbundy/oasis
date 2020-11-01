@@ -1,6 +1,8 @@
 .alacritty.yml
 .bashrc
 .config/kitty
+.config/mutt/muttrc
+.config/zsh
 .fzf.zsh
 .gitallow
 .gitconfig
@@ -14,5 +16,3 @@
 .vimrc
 .yabairc
 .zshrc
-.config/zsh
-.config/mutt/muttrc

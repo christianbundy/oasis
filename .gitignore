@@ -1,5 +1,5 @@
 # Warning: File is generated from .gitallow, do not edit.
-# <https://github.com/christianbundy/dotfiles/blob/master/.local/bin/gitallow>
+# <https://github.com/christianbundy/dotfiles/blob/master/.local/bin/git-allow>
 /*
 !/.alacritty.yml
 !/.bashrc
