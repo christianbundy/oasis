@@ -27,6 +27,9 @@ output = [
     "/*"
 ]
 
+# create if not exists
+with open(gitallow, 'w'): pass
+
 with open(gitallow, 'r+') as file:
     allow_list = [line.rstrip().strip('/') for line in file]
 
