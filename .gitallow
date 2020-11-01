@@ -15,3 +15,4 @@
 .yabairc
 .zshrc
 .config/zsh
+.config/mutt/muttrc

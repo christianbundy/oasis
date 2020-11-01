@@ -6,6 +6,9 @@
 !/.config
 /.config/*
 !/.config/kitty
+!/.config/mutt
+/.config/mutt/*
+!/.config/mutt/muttrc
 !/.config/zsh
 !/.fzf.zsh
 !/.gitallow
