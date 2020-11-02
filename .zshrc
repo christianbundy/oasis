@@ -36,7 +36,7 @@ done
 
 FPATH=${HOME}/.config/zsh/completions/src:$FPATH
 
-package_manager=error
+package_manager=false
 
 package_manager_list=(
   pacman
