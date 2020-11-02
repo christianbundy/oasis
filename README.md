@@ -1,7 +1,5 @@
 # ~/
 
-## History
-
 My interest in dotfiles is highly correlated with how recently I've had
 to set up a new computer. My activity will fluctuate with interest, so
 I'm aiming to document the project enough that my future self won't just
