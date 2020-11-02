@@ -24,15 +24,21 @@ gitallow = os.path.join(git_top_level, '.gitallow')
 output = [
     "# Warning: File is generated from .gitallow, do not edit.",
     "# <https://github.com/christianbundy/dotfiles/blob/master/.local/bin/git-allow>",
-    "/*"
+    "/*",
 ]
 
-# create if not exists
-with open(gitallow, 'w'): pass
+default_allow_list = [
+    ".gitallow",
+    ".gitignore"
+]
 
-with open(gitallow, 'r+') as file:
-    allow_list = [line.rstrip().strip('/') for line in file]
-
+try:
+    file = open(gitallow, 'r+')
+    allow_list = [line.rstrip().strip('/') for line in file] + default_allow_list
+except FileNotFoundError:
+    file = open(gitallow, 'w')
+    allow_list = default_allow_list
+finally:
     for allow_path in [path.strip('/') for path in sys.argv[1:]]:
         if allow_path not in output:
             allow_list.append(allow_path)
@@ -51,7 +57,9 @@ with open(gitallow, 'r+') as file:
                     output.append(deny)
 
     file.seek(0)
-    file.write("\n".join(allow_list) + "\n")
+    explicit_allow_list = [
+        x for x in allow_list if x not in default_allow_list]
+    file.write("\n".join(explicit_allow_list) + "\n")
     file.truncate()
 
 with open(gitignore, 'w') as file:

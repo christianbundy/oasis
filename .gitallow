@@ -4,9 +4,7 @@
 .config/mutt/muttrc
 .config/zsh
 .fzf.zsh
-.gitallow
 .gitconfig
-.gitignore
 .gitmodules
 .inputrc
 .local/bin
