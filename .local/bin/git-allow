@@ -34,7 +34,8 @@ default_allow_list = [
 
 try:
     file = open(gitallow, 'r+')
-    allow_list = [line.rstrip().strip('/') for line in file] + default_allow_list
+    allow_list = [line.rstrip().strip('/')
+                  for line in file] + default_allow_list
 except FileNotFoundError:
     file = open(gitallow, 'w')
     allow_list = default_allow_list
