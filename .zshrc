@@ -1,5 +1,12 @@
 #!/usr/bin/env zsh
 
+# Save history
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=100000
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+
 # Vim key-bindings
 bindkey -v
 
