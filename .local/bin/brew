@@ -5,4 +5,4 @@ if [ "$1" = install ] || [ "$1" = upgrade ]; then
   original brew "$brew_command" --build-from-source "$@"
 else
   original brew "$@"
-fi;
+fi
