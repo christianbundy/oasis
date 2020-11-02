@@ -2,7 +2,7 @@ set from = "christianbundy@fraction.io"
 set realname = "Christian Bundy"
 
 # my_pass
-source secrets
+source ~/.config/mutt/secrets
 
 set imap_user=$from
 set imap_pass=$my_pass
