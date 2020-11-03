@@ -2,4 +2,4 @@
 
 app="$(print -l /System/Applications/*.app /Applications/* /System/Library/CoreServices/*.app | fzf)"
 
-[[ !  -z  "${app}"  ]] && open "${app}"
+[[ ! -z "${app}" ]] && open "${app}"

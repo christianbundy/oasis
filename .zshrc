@@ -47,7 +47,7 @@ package_manager_list=(
 )
 
 for p in $package_manager_list; do
-  if $(command -v $p &> /dev/null); then
+  if $(command -v $p &>/dev/null); then
     package_manager="$p"
     break
   fi
@@ -56,16 +56,16 @@ done
 export EMAIL="christianbundy@fraction.io"
 
 case $package_manager in
-    pacman)
-      source /usr/share/fzf/completion.zsh
-      source /usr/share/fzf/key-bindings.zsh
-    ;;
+pacman)
+  source /usr/share/fzf/completion.zsh
+  source /usr/share/fzf/key-bindings.zsh
+  ;;
 
-    brew)
-      source /usr/local/opt/fzf/shell/completion.zsh
-      source /usr/local/opt/fzf/shell/key-bindings.zsh
-      export EMAIL="christian@truework.com"
-    ;;
+brew)
+  source /usr/local/opt/fzf/shell/completion.zsh
+  source /usr/local/opt/fzf/shell/key-bindings.zsh
+  export EMAIL="christian@truework.com"
+  ;;
 esac
 
 # See `.local/bin/original`

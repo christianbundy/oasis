@@ -10,6 +10,7 @@
 /.config/mutt/*
 !/.config/mutt/muttrc
 !/.config/zsh
+!/.editorconfig
 !/.fzf.zsh
 !/.gitallow
 !/.gitconfig

@@ -3,6 +3,7 @@
 .config/kitty
 .config/mutt/muttrc
 .config/zsh
+.editorconfig
 .fzf.zsh
 .gitconfig
 .gitmodules
