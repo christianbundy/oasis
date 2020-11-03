@@ -1,4 +1,6 @@
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+#!/usr/bin/env bash
+
+#TODO: Add FZF completion and key-bindings.
 
 export PATH="${HOME}/.cargo/bin:$PATH"
 
