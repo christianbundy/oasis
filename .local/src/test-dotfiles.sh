@@ -16,3 +16,10 @@ shfmt -s -d $(git ls-files | grep -E '(Dockerfile|sh|zsh(rc)?|bash(rc)?)$') || e
 
 echo "shellcheck"
 git ls-files | grep -E '\.(sh|bash(rc)?)$' | xargs -L1 shellcheck
+
+echo "prettier"
+for f in $(git ls-files); do
+  if [ -f "$f" ]; then
+    echo "$f"
+  fi
+done | xargs npx prettier --check --ignore-unknown
