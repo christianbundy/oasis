@@ -1,6 +1,5 @@
 FROM debian:bullseye
 
-
 RUN apt-get update && apt-get install -y \
   bat \
   ca-certificates \
@@ -16,13 +15,13 @@ RUN apt-get update && apt-get install -y \
   zsh
 
 RUN adduser christian --shell /bin/zsh --disabled-password --gecos ""
-  
+
 USER christian
 WORKDIR /home/christian
 
 RUN cargo install \
-starship \
-zoxide
+  starship \
+  zoxide
 
 COPY --chown=christian . .
 
