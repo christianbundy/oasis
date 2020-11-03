@@ -53,6 +53,8 @@ for p in $package_manager_list; do
   fi
 done
 
+EMAIL="christianbundy@fraction.io"
+
 case $package_manager in
     pacman)
       source /usr/share/fzf/completion.zsh
@@ -62,6 +64,7 @@ case $package_manager in
     brew)
       source /usr/local/opt/fzf/shell/completion.zsh
       source /usr/local/opt/fzf/shell/key-bindings.zsh
+      export EMAIL="christian@truework.com"
     ;;
 esac
 
