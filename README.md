@@ -10,8 +10,8 @@ In the past I've been very excited about tools like Stow and Homesick,
 but my interest has turned toward solutions that are more boring and
 simple. In particular, I'm inspired by Drew DeVault's configuration that
 he documented [in a blog post][0]. I've used this as the foundation for
-my new setup, but have also been experimenting with small extensions 
-(like `.gitallow`) that are *highly* experimental.
+my new setup, but have also been experimenting with small extensions
+(like `.gitallow`) that are _highly_ experimental.
 
 ## Getting started
 
@@ -20,7 +20,7 @@ cd ~
 git init
 git remote add origin https://github.com/christianbundy/dotfiles.git
 git pull --set-upstream origin master
-git submodule update --init --recursive --depth 1 
+git submodule update --init --recursive --depth 1
 ```
 
 ## License
