@@ -12,6 +12,8 @@ export FZF_DEFAULT_OPTS='--no-height --no-reverse'
 # Vim key-bindings
 bindkey -v
 
+export PATH="${HOME}/.cargo/bin:$PATH"
+
 # starship
 eval "$(starship init zsh)"
 
@@ -65,6 +67,10 @@ brew)
   source /usr/local/opt/fzf/shell/completion.zsh
   source /usr/local/opt/fzf/shell/key-bindings.zsh
   export EMAIL="christian@truework.com"
+  ;;
+apt)
+  source /usr/share/doc/fzf/examples/completion.zsh
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
   ;;
 esac
 

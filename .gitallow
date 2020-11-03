@@ -3,6 +3,7 @@
 .config/kitty
 .config/mutt/muttrc
 .config/zsh
+.dockerignore
 .editorconfig
 .fzf.zsh
 .gitconfig
@@ -16,4 +17,5 @@
 .vimrc
 .yabairc
 .zshrc
+Dockerfile
 README.md
