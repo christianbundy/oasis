@@ -15,6 +15,21 @@ my new setup, but have also been experimenting with small extensions
 
 ## Getting started
 
+### Try before you ~~buy~~ install
+
+If you have Docker, it's easy to try out my dotfiles:
+
+```sh
+git clone https://github.com/christianbundy/dotfiles.git christianbundy-dotfiles
+cd christianbundy-dotfiles
+docker build -t christianbundy-dotfiles .
+docker run christianbundy-dotfiles
+```
+
+### Install
+
+If you want to install these dotfiles to your home directory:
+
 ```sh
 cd ~
 git init
