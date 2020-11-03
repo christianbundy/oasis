@@ -1,2 +1,1 @@
-#!/bin/sh
-cat "$(dates)"
+../src/journal.sh

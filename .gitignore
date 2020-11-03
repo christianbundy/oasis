@@ -22,6 +22,7 @@
 !/.local/share
 /.local/share/*
 !/.local/share/brew
+!/.local/src
 !/.skhdrc
 !/.vim
 /.vim/*
