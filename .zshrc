@@ -53,7 +53,7 @@ for p in $package_manager_list; do
   fi
 done
 
-EMAIL="christianbundy@fraction.io"
+export EMAIL="christianbundy@fraction.io"
 
 case $package_manager in
     pacman)
