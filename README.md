@@ -23,7 +23,7 @@ If you have Docker, it's easy to try out my dotfiles:
 git clone https://github.com/christianbundy/dotfiles.git christianbundy-dotfiles
 cd christianbundy-dotfiles
 docker build -t christianbundy-dotfiles .
-docker run christianbundy-dotfiles
+docker run -it christianbundy-dotfiles
 ```
 
 ### Install
