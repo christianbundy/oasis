@@ -1,5 +1,9 @@
 #!/bin/sh
 
-command -v bat >/dev/null 2>&1 && exec bat "$@"
-command -v batcat >/dev/null 2>&1 && exec batcat "$@"
-exec original cat "$@"
+if command-exists bat; then
+  exec bat "$@"
+elif command-exists batcat; then
+  exec batcat "$@"
+else
+  exec original cat "$@"
+fi

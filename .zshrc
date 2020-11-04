@@ -14,6 +14,10 @@ bindkey -v
 
 export PATH="${HOME}/.cargo/bin:$PATH"
 
+# See `.local/bin/original`
+export ORIGINAL_PATH="$PATH"
+export PATH="$(print -l ~)/.local/bin:$ORIGINAL_PATH"
+
 # starship
 eval "$(starship init zsh)"
 
@@ -49,7 +53,7 @@ package_manager_list=(
 )
 
 for p in $package_manager_list; do
-  if $(command -v $p &>/dev/null); then
+  if command-exists "$p"; then
     package_manager="$p"
     break
   fi
@@ -74,10 +78,6 @@ apt)
   ;;
 esac
 
-# See `.local/bin/original`
-export ORIGINAL_PATH="$PATH"
-
-export PATH="$(print -l ~)/.local/bin:$ORIGINAL_PATH"
 export VISUAL="$(which vim)"
 export package_manager
 
