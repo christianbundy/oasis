@@ -3,6 +3,7 @@
 #TODO: Add FZF completion and key-bindings.
 
 export PATH="${HOME}/.cargo/bin:$PATH"
+export PAGER='bat'
 
 # starship
 eval "$(starship init bash)"
