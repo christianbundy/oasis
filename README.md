@@ -34,7 +34,7 @@ If you want to install these dotfiles to your home directory:
 cd ~
 git init
 git remote add origin https://github.com/christianbundy/dotfiles.git
-git pull --set-upstream origin master
+git pull --set-upstream origin main
 git submodule update --init --recursive --depth 1
 ```
 

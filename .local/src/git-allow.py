@@ -23,7 +23,7 @@ gitallow = os.path.join(git_top_level, '.gitallow')
 
 output = [
     "# Warning: File is generated from .gitallow, do not edit.",
-    "# <https://github.com/christianbundy/dotfiles/blob/master/.local/bin/git-allow>",
+    "# <https://github.com/christianbundy/dotfiles/blob/main/.local/bin/git-allow>",
     "/*",
 ]
 
