@@ -23,3 +23,14 @@ for f in $(git ls-files); do
     echo "$f"
   fi
 done | xargs npx prettier --check --ignore-unknown
+
+# was going to use `file` but `file -E` is unsupported :(
+echo "check permissions / symlinks"
+#shellcheck disable=SC2046
+for f in $(git ls-files); do
+  if [ ! -d "$f" ]; then
+    if ! cat "$f" 1>/dev/null 2>&1; then
+      exec cat "$f"
+    fi
+  fi
+done
