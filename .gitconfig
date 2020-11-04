@@ -5,6 +5,6 @@
 [pull]
 	rebase = false
 [core]
-    pager = delta
+	pager = delta
 [interactive]
-    diffFilter = delta #--color-only
+  diffFilter = delta --color-only

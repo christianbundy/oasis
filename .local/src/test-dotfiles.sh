@@ -10,6 +10,27 @@ docker run "$hash" zsh .zshrc || exit 1
 echo "docker -> bash"
 docker run "$hash" bash .bashrc || exit 1
 
+echo "docker -> script"
+
+docker run -it "$hash" zsh -i -c '
+  set -e
+
+  ls --tree
+  command-exists $(git config --get core.pager)
+  git init
+  echo hi > foo-bar-file
+
+  set +e
+  git add foo-bar-file 2>/dev/null
+  set -e
+
+  git diff --staged --stat | grep foo-bar-file && exit 1
+  git allow foo-bar-file
+  git add foo-bar-file
+  git diff --staged --stat | grep foo-bar-file || exit 1
+  git diff --staged
+' || exit 1
+
 echo "shfmt"
 #shellcheck disable=SC2046
 shfmt -s -d $(git ls-files | grep -E '(Dockerfile|sh|zsh(rc)?|bash(rc)?)$') || exit 1

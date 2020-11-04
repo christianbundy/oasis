@@ -20,6 +20,7 @@ USER christian
 WORKDIR /home/christian
 
 RUN cargo install \
+  git-delta \
   starship \
   zoxide
 
