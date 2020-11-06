@@ -1,10 +1,10 @@
 # Warning: File is generated from .gitallow, do not edit.
 # <https://github.com/christianbundy/dotfiles/blob/main/.local/bin/git-allow>
 /*
-!/.alacritty.yml
 !/.bashrc
 !/.config
 /.config/*
+!/.config/alacritty
 !/.config/kitty
 !/.config/mutt
 /.config/mutt/*
@@ -27,12 +27,10 @@
 /.local/share/*
 !/.local/share/brew
 !/.local/src
-!/.skhdrc
 !/.vim
 /.vim/*
 !/.vim/pack
 !/.vimrc
-!/.yabairc
 !/.zshrc
 !/Dockerfile
 !/README.md

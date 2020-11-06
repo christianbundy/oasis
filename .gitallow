@@ -1,5 +1,5 @@
-.alacritty.yml
 .bashrc
+.config/alacritty
 .config/kitty
 .config/mutt/muttrc
 .config/skhd
@@ -14,10 +14,8 @@
 .local/bin
 .local/share/brew
 .local/src
-.skhdrc
 .vim/pack
 .vimrc
-.yabairc
 .zshrc
 Dockerfile
 README.md
