@@ -10,6 +10,7 @@
 /.config/mutt/*
 !/.config/mutt/muttrc
 !/.config/skhd
+!/.config/yabai
 !/.config/zsh
 !/.dockerignore
 !/.editorconfig
