@@ -9,6 +9,7 @@
 !/.config/mutt
 /.config/mutt/*
 !/.config/mutt/muttrc
+!/.config/skhd
 !/.config/zsh
 !/.dockerignore
 !/.editorconfig

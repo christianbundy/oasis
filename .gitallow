@@ -2,6 +2,7 @@
 .bashrc
 .config/kitty
 .config/mutt/muttrc
+.config/skhd
 .config/zsh
 .dockerignore
 .editorconfig
