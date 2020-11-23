@@ -80,6 +80,8 @@ apt)
   ;;
 esac
 
+alias shit='zsh -c "$history[$[HISTCMD-1]]"'
+
 export VISUAL="$(which vim)"
 export package_manager
 
