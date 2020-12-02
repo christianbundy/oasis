@@ -23,3 +23,6 @@
 [submodule ".vim/pack/plugins/start/editorconfig"]
 	path = .vim/pack/plugins/start/editorconfig
 	url = https://github.com/editorconfig/editorconfig-vim.git
+[submodule ".vim/pack/tpope/start/vim-vinegar"]
+	path = .vim/pack/tpope/start/vim-vinegar
+	url = https://github.com/tpope/vim-vinegar.git
