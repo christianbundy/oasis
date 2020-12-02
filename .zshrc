@@ -7,8 +7,6 @@ SAVEHIST=100000
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
 
-export PAGER='bat'
-
 export FZF_DEFAULT_OPTS='--no-height --no-reverse'
 
 # Vim key-bindings
