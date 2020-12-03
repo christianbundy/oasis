@@ -4,10 +4,6 @@
 [submodule ".vim/pack/plugins/start/vim-polyglot"]
 	path = .vim/pack/plugins/start/vim-polyglot
 	url = https://github.com/sheerun/vim-polyglot
-[submodule ".vim/pack/plugins/start/coc"]
-	path = .vim/pack/plugins/start/coc
-	url = https://github.com/neoclide/coc.nvim.git
-	branch = release
 [submodule ".config/zsh/zsh-completions"]
 	path = .config/zsh/zsh-completions
 	url = git://github.com/zsh-users/zsh-completions.git
@@ -23,6 +19,12 @@
 [submodule ".vim/pack/plugins/start/editorconfig"]
 	path = .vim/pack/plugins/start/editorconfig
 	url = https://github.com/editorconfig/editorconfig-vim.git
-[submodule ".vim/pack/tpope/start/vim-vinegar"]
-	path = .vim/pack/tpope/start/vim-vinegar
+[submodule ".vim/pack/plugins/start/vim-vinegar"]
+	path = .vim/pack/plugins/start/vim-vinegar
 	url = https://github.com/tpope/vim-vinegar.git
+[submodule ".vim/pack/plugins/start/fugitive"]
+	path = .vim/pack/plugins/start/fugitive
+	url = https://tpope.io/vim/fugitive.git
+[submodule ".vim/pack/plugins/start/youcompleteme"]
+	path = .vim/pack/plugins/start/youcompleteme
+	url = https://github.com/ycm-core/YouCompleteMe.git
