@@ -8,3 +8,7 @@
 	pager = delta
 [interactive]
   diffFilter = delta --color-only
+[alias]
+	co = checkout
+	cb = create-branch
+	db = delete-branch
