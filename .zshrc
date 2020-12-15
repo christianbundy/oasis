@@ -32,14 +32,18 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 # <https://github.com/ajeetdsouza/zoxide/issues/114>
 export _ZO_RESOLVE_SYMLINKS=1
 
+autoload -Uz compinit
+compinit
+
 # zsh plugins
 zsh_plugins=(
-  syntax-highlighting
-  autosuggestions
+  fzf-tab/fzf-tab.plugin
+  syntax-highlighting/zsh-syntax-highlighting
+  autosuggestions/zsh-autosuggestions
 )
 
 for plugin in $zsh_plugins; do
-  source ${HOME}/.config/zsh/${plugin}/zsh-${plugin}.zsh
+  source ${HOME}/.config/zsh/${plugin}.zsh
 done
 
 FPATH=${HOME}/.config/zsh/completions/src:$FPATH
@@ -84,5 +88,3 @@ export VISUAL="$(which vim)"
 export package_manager
 alias dc='docker-compose'
 
-autoload -Uz compinit
-compinit

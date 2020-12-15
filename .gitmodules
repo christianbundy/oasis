@@ -28,3 +28,6 @@
 [submodule ".vim/pack/plugins/start/youcompleteme"]
 	path = .vim/pack/plugins/start/youcompleteme
 	url = https://github.com/ycm-core/YouCompleteMe.git
+[submodule ".config/zsh/fzf-tab"]
+	path = .config/zsh/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab
