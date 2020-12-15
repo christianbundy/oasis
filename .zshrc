@@ -87,4 +87,6 @@ alias shit='zsh -c "$history[$[HISTCMD-1]]"'
 export VISUAL="$(which vim)"
 export package_manager
 alias dc='docker-compose'
+alias g='g'
+alias e='vim'
 
