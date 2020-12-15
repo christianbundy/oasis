@@ -90,3 +90,8 @@ alias dc='docker-compose'
 alias g='g'
 alias e='vim'
 
+# fzf-tab
+zstyle ":completion:*:git-checkout:*" sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':fzf-tab:complete:*' fzf-preview 'show $realpath'
