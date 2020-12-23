@@ -6,6 +6,9 @@ HISTSIZE=10000
 SAVEHIST=100000
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
+setopt appendhistory     #Append history to the history file (no overwriting)
+setopt sharehistory      #Share history across terminals
+setopt incappendhistory  #Immediately append to the history file, not just when a term is killed
 
 export FZF_DEFAULT_OPTS='--no-height --no-reverse'
 
