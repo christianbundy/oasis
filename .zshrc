@@ -19,7 +19,7 @@ export PATH="${HOME}/.cargo/bin:$PATH"
 
 # See `.local/bin/original`
 export ORIGINAL_PATH="$PATH"
-export PATH="$(print -l ~)/.local/bin:$ORIGINAL_PATH"
+export PATH="$(print -l ~/.local/bin):$(print -l ~/go/bin):$ORIGINAL_PATH"
 
 # starship
 eval "$(starship init zsh)"
