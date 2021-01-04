@@ -89,12 +89,15 @@ alias shit='zsh -c "$history[$[HISTCMD-1]]"'
 
 export VISUAL="$(which vim)"
 export package_manager
+
+alias d='docker-compose'
 alias dc='docker-compose'
-alias g='g'
+alias g='git'
 alias e='vim'
 
 # fzf-tab
 zstyle ":completion:*:git-checkout:*" sort false
+zstyle ":completion:*:git-co:*" sort false
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':fzf-tab:complete:*' fzf-preview 'show $realpath'
