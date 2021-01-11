@@ -101,3 +101,4 @@ zstyle ":completion:*:git-co:*" sort false
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':fzf-tab:complete:*' fzf-preview 'show $realpath'
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
